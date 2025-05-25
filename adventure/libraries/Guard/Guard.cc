@@ -1,3 +1,6 @@
+#include <Arduino.h>
+
+#include "BouncingLinearMovementStrategy.h"
 #include "Constants.h"
 #include "Guard.h"
 
@@ -14,27 +17,7 @@ Guard::Guard(Point& position, int xOffset, int yOffset) : _moveTimer(GUARD_DELAY
  *      - Finally, it moves into the next square if allowed
  */
 void Guard::move(Board* board) override {
-    if (!_moveTimer.timeIsUp()) return;
-    
-    if (!board->inBounds(_position.x + _xOffset, _position.y + _yOffset)) rebound();
-
-    int toX = _position.x + _xOffset;
-    int toY = _position.y + _yOffset;
-    Entity* destOccupant = board->getEntityByPosition(toX, toY);
-    if (destOccupant != nullptr) {
-        attack(destOccupant);
-        
-        rebound();
-        toX = _position.x + _xOffset;
-        toY = _position.y + _yOffset;
-    }
-
-    if (board->inBounds(toX, toY)) {
-        _position.x = toX;
-        _position.y = toY;
-    }
-
-    _moveTimer.startTimer();
+    _moveStrategy.move(board, this);
 }
 
 Entity::MoveResult Guard::receiveMove(Entity* e) override {
@@ -44,6 +27,12 @@ Entity::MoveResult Guard::receiveMove(Entity* e) override {
 void Guard::attack(Player* p) {
     p->receiveAttack(GUARD_DAMAGE);
     _attackTimer.startTimer();
+
+    Serial.print("Guard attacked you for ");
+    Serial.print(GUARD_DAMAGE);
+    Serial.print("! You have ");
+    Serial.print(p->getHealth());
+    Serial.println(" health left.");
 }
 
 void Guard::rebound() {
