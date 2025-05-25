@@ -18,7 +18,8 @@ private:
     void attack(Entity* e) {}
     void attack(Player* p);
 
-    Timer _attackTimer;
+    void rebound();
+
     Timer _moveTimer;
 
     Point _position;

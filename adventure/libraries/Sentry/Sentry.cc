@@ -12,11 +12,16 @@ Sentry::Sentry(Point& position, int attackAreaLength) : _attackTimer(SENTRY_DELA
     _attackTimer.startTimer();
 }
 
+/*
+ * The sentry doesn't move, so its move sequence only checks for the player and attacks if able
+ */
 void Sentry::move(Board* board) override {
+    if (!_attackTimer.timeIsUp()) return;
+
     const int offset = (_position.x - 1) / 2;
-    for (int row = _position.y - offset; row <= _position.y + offset; ++row) {
-        for (int col = _position.x - offset; col <= _position.x + offset; ++col) {
-            Entity* curEntity = board->getEntity(row, col);
+    for (int curX = _position.x - offset; curX <= _position.x + offset; ++curX) {
+        for (int curY = _position.y - offset; curY <= _position.y + offset; ++curY) {
+            Entity* curEntity = (board->inBounds(curX, curY)) ? board->getEntityByPosition(curX, curY) : nullptr;
             if (curEntity != nullptr) attack(curEntity);
         }
     }
@@ -27,8 +32,6 @@ Entity::MoveResult Sentry::receiveMove(Entity* e) override {
 }
 
 void Sentry::attack(Player* player) {
-    if (_attackTimer.timeIsUp()) {
-        player->receiveAttack(SENTRY_DAMAGE);
-        _attackTimer.startTimer();
-    }
+    player->receiveAttack(SENTRY_DAMAGE);
+    _attackTimer.startTimer();
 }
