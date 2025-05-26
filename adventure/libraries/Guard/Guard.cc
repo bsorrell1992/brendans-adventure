@@ -3,9 +3,7 @@
 #include "Constants.h"
 #include "Guard.h"
 
-Guard::Guard(Point& position, int xOffset, int yOffset) : _moveTimer(GUARD_DELAY), _xOffset(xOffset), _yOffset(yOffset) {
-    _position = position;
-
+Guard::Guard(Point& position, Point& offset) : _moveTimer(GUARD_DELAY), _position(position), _offset(offset) {
     _moveTimer.startTimer();
 }
 
@@ -34,6 +32,5 @@ void Guard::attack(Player* p) {
 }
 
 void Guard::rebound() {
-    _xOffset *= -1;
-    _yOffset *= -1;
+    _offset *= -1;
 }

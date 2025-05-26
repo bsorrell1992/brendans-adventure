@@ -13,7 +13,7 @@ class Patrol : public Entity {
 public:
     friend class BouncingLinearMovementStrategy;
 
-    Patrol(Point& position, int xOffset, int yOffset);
+    Patrol(Point& position, Point& offset);
     ~Patrol() {};
 
     void move(Board* board) override;
@@ -29,6 +29,5 @@ private:
     Timer _moveTimer;
 
     Point _position;
-    int _xOffset;
-    int _yOffset;
+    Point _offset;
 };

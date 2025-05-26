@@ -3,9 +3,7 @@
 #include "Constants.h"
 #include "Patrol.h"
 
-Patrol::Patrol(Point& position, int xOffset, int yOffset) : _moveTimer(PATROL_DELAY), _xOffset(xOffset), _yOffset(yOffset) {
-    _position = position;
-
+Patrol::Patrol(Point& position, Point& offset) : _moveTimer(PATROL_DELAY), _position(position), _offset(offset) {
     _moveTimer.startTimer();
 }
 
@@ -28,6 +26,5 @@ void Entity::attack(Player* p) {
 }
 
 void Patrol::rebound() {
-    _xOffset *= -1;
-    _yOffset *= -1;
+    _offset *= -1;
 }
