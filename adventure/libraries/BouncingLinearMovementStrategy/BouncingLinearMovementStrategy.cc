@@ -6,7 +6,7 @@
 void BouncingLinearMovementStrategy::move(Board* board, Entity* mover) override {
     if (!mover->_moveTimer.timeIsUp()) return;
 
-    if (!board->inBounds(mover->_position.x + mover->_xOffset, mover->_position.y + mover->_yOffset)) rebound();
+    if (!board->inBounds(mover->_position.x + mover->_xOffset, mover->_position.y + mover->_yOffset)) mover->rebound();
 
     int toX = mover->_position.x + mover->_xOffset;
     int toY = mover->_position.y + mover->_yOffset;
@@ -14,7 +14,7 @@ void BouncingLinearMovementStrategy::move(Board* board, Entity* mover) override 
     if (destOccupant != nullptr) {
         mover->attack(destOccupant);
         
-        rebound();
+        mover->rebound();
         toX = mover->_position.x + mover->_xOffset;
         toY = mover->_position.y + mover->_yOffset;
     }

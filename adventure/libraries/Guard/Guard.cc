@@ -1,6 +1,5 @@
 #include <Arduino.h>
 
-#include "BouncingLinearMovementStrategy.h"
 #include "Constants.h"
 #include "Guard.h"
 
@@ -26,7 +25,6 @@ Entity::MoveResult Guard::receiveMove(Entity* e) override {
 
 void Guard::attack(Player* p) {
     p->receiveAttack(GUARD_DAMAGE);
-    _attackTimer.startTimer();
 
     Serial.print("Guard attacked you for ");
     Serial.print(GUARD_DAMAGE);

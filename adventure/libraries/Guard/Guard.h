@@ -2,8 +2,10 @@
  * Moves back and forth in front of an entrance
  * Movement is perpendicular to corridor
  */
+#include "Board.h"
 #include "BouncingLinearMovementStrategy.h"
 #include "Entity.h"
+#include "Player.h"
 #include "Point.h"
 #include "Timer.h"
 
