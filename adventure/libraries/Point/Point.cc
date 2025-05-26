@@ -1,9 +1,21 @@
 #include "Point.h"
 
-Point Point::operator*(int scalar) const {
-    return {this.x * scalar, this.y * scalar};
+Point Point::operator+(const Point& rhs) const {
+    return {this.x + rhs.x, this.y + rhs.y};
 }
 
-Point Point::operator+(const Point& other) const {
-    return {this.x + other.x, this.y + other.y};
+Point Point::operator*(int rhs) const {
+    return {this.x * rhs, this.y * rhs};
+}
+
+Point& Point::operator+=(const Point& rhs) {
+    this.x += rhs.x;
+    this.y += rhs.y;
+    return *this;
+}
+
+Point& Point::operator*=(int rhs) {
+    this.x *= rhs;
+    this.y *= rhs;
+    return *this;
 }
