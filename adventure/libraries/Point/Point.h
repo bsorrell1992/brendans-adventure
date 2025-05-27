@@ -1,7 +1,8 @@
-template <typename T>
+#include <Arduino.h>
+
 struct Point {
-    T x;
-    T y;
+    byte x;
+    byte y;
 
     Point operator+(const Point& rhs) const;
     Point operator*(int rhs) const;
