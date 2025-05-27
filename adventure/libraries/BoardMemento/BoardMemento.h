@@ -1,12 +1,14 @@
 /*
  * Used to store entity state between loops
  */
+#include "Board.h"
+
 class BoardMemento {
-public:
-    BoardMemento(Board* state);
-
 private:
-    T& getState() const;
+    friend class Board;
 
-    T _state;
+    BoardMemento(BoardState* state);
+    BoardState& getState() const;
+
+    BoardState _state;
 };

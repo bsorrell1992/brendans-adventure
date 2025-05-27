@@ -1,9 +1,7 @@
-#include "EntityMemento.h"
+#include "BoardMemento.h"
 
-template <typename T>
-EntityMemento<T>::EntityMemento<T>(T& state) : _state(state) {}
+BoardMemento::BoardMemento(BoardState& state) : _state(state) {}
 
-template <typename T>
-T& EntityMemento::getState() const {
+BoardState& BoardMemento::getState() const {
     return _state;
 }
