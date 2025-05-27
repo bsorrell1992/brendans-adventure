@@ -14,6 +14,8 @@ public:
     bool isAlive() const;
     void revive();
 
+    int getPoints() const;
+
     void drinkHealthPotion();
 
     void useSpeedboots();
@@ -31,42 +33,9 @@ private:
     bool _sword = false;
     bool _pickaxe = false;
     bool _speedboots = false;
+    bool _speedbootsOn = false;
     int _armor = 1;
     int _numHealthPotions = 0;
 
     Timer _moveTimer;
 };
-
-/*
-    class Player : public MovingEntity {
-    private:
-
-    public:
-        int getPoints() { return points; }
-        int addPoints(int points) { this->points += points; }
-
-        void drinkHealthPotion() {
-            health += HEALTH_POTION_HEALING;
-            --numHealthPotions;
-        }
-
-        void useSpeedBoots() {
-            moveTimer.setDelay(PLAYER_DELAY / 2);
-            Serial.println("You have put on your speed boots. You are now moving twice as fast!");
-        }
-
-        void removeSpeedBoots() {
-            moveTimer.setDelay(PLAYER_DELAY);
-            Serial.println("You have removed your speed boots. You are now moving at your original speed.");
-        }
-
-        void printKill(String killType) {
-            Serial.print("You killed");
-            Serial.print(killType);
-            Serial.print(". Your total is now ");
-            Serial.println(points);
-        }
-
-        void move(int dx, int dy);
-    };
-*/

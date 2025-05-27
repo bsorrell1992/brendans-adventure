@@ -71,11 +71,35 @@ void Player::revive() {
     _health = PLAYER_INITIAL_HEALTH;
 }
 
+void Player::getPoints() const {
+    return _points;
+}
+
 void Player::drinkHealthPotion() {
     if (_numHealthPotions > 0) {
         _health += HEALTH_POTION_HEALING;
         --_numHealthPotions;
     } else Serial.println(F("You do not have any health potions left."));
+}
+
+void Player::useSpeedboots() {
+    if (_speedboots) {
+        if (!_speedbootsOn) {
+            _speedbootsOn = true;
+            _moveTimer.speedUp();
+            Serial.println(F("You have put on your speed boots. You are now moving twice as fast!"));
+        } else Serial.println(F("You are already wearing your speed boots!"));
+    } else Serial.println(F("You do not have the speed boots."));
+}
+
+void Player::removeSpeedboots() {
+    if (_speedboots) {
+        if (_speedbootsOn) {
+            _speedbootsOn = false;
+            _moveTimer.slowDown();
+            Serial.println(F("You have taken off your speed boots. You are now moving at your original speed."));
+        } else Serial.println(F("You are not wearing your speed boots!"));
+    } else Serial.println(F("You do not have the speed boots."));
 }
 
 void Player::collectItem(Entity::MoveResultItem itemCode) {
