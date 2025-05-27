@@ -36,5 +36,5 @@ const int TREASURE_POINTS = 1000;
 const int HEALTH_POTION_HEALING = 10;
 const int SPEED_BOOTS_MULTIPLIER = 2;
 
-const int SPAWN_X = 3;
-const int SPAWN_Y = 3;
+const byte SPAWN_X = 3;
+const byte SPAWN_Y = 3;

@@ -26,51 +26,25 @@ void Player::move(Board* board) {
             Entity::MoveResult moveResult = destOccupant->receiveMove(this);
             switch(moveResult.emrCode) {
                 case Entity::MoveResultCode::ITEM:
-                    switch(moveResult.data) {
-                        case Entity::MoveResultItem::ARMOR:
-                            ++_armor;
-                            break;
-                        case Entity::MoveResultItem::HEALTH_POTION:
-                            ++_numHealthPotions;
-                            break;
-                        case Entity::MoveResultItem::KEY:
-                            _key = true;
-                            break;
-                        case Entity::MoveResultItem::PICKAXE:
-                            _pickaxe = true;
-                            break;
-                        case Entity::MoveResultItem::SPEEDBOOTS:
-                            _speedboots = true;
-                            _moveTimer.speedUp();
-                            break;
-                        case Entity::MoveResultItem::SWORD:
-                            _sword = true;
-                            break;
-                        case Entity::MoveResultItem::TREASURE:
-                            _treasure = true;
-                            break;
-                        default:
-                            throw std::runtime_error("Invalid item type");
-                    }
+                    collectItem(moveResult.emrItem);
+                    break;
                 case Entity::MoveResultCode::NEEDS_KEY:
                     if (_key) {
                         _position += offset;
                         board->removeEntity(destOccupant);
-                    }
+                    } else Serial.println(F("You need the key!"));
                     break;
                 case Entity::MoveResultCode::NEEDS_PICKAXE:
                     if (_pickaxe) {
                         _position += offset;
                         board->removeEntity(destOccupant);
-                    }
+                    } else Serial.println(F("You need the pickaxe!"));
                     break;
                 case Entity::MoveResultCode::NEEDS_SWORD:
                     if (_sword) {
                         _position += offset;
                         board->removeEntity(destOccupant);
-                    }
-                    break;
-                default:
+                    } else Serial.println(F("You cannot attack without the sword!"));
                     break;
             }
         }
@@ -80,7 +54,58 @@ void Player::move(Board* board) {
 }
 
 void Player::receiveAttack(int damage) {
-    _health -= damage;
+    _health -= damage / _armor;
+
+    if (_health <= 0) {
+        if (_numHealthPotions > 0) drinkHealthPotion();
+        else _alive = false;
+    }
+}
+
+bool Player::isAlive() const {
+    return _alive;
+}
+
+void Player::revive() {
+    _alive = true;
+    _health = PLAYER_INITIAL_HEALTH;
+}
+
+void Player::drinkHealthPotion() {
+    if (_numHealthPotions > 0) {
+        _health += HEALTH_POTION_HEALING;
+        --_numHealthPotions;
+    } else Serial.println(F("You do not have any health potions left."));
+}
+
+void Player::collectItem(Entity::MoveResultItem itemCode) {
+    switch(itemCode) {
+        case Entity::MoveResultItem::ARMOR:
+            ++_armor;
+            break;
+        case Entity::MoveResultItem::HEALTH_POTION:
+            ++_numHealthPotions;
+            break;
+        case Entity::MoveResultItem::KEY:
+            _key = true;
+            break;
+        case Entity::MoveResultItem::PICKAXE:
+            _pickaxe = true;
+            break;
+        case Entity::MoveResultItem::SPEEDBOOTS:
+            _speedboots = true;
+            _moveTimer.speedUp();
+            Serial.print(F("You have picked up the speed boots. You are now moving twice as fast!"));
+            break;
+        case Entity::MoveResultItem::SWORD:
+            _sword = true;
+            break;
+        case Entity::MoveResultItem::TREASURE:
+            _treasure = true;
+            break;
+        default:
+            throw std::runtime_error("Invalid item type");
+    }
 }
 
 /*

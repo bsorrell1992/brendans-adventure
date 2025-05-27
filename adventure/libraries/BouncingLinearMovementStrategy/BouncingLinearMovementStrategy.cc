@@ -12,7 +12,6 @@ void BouncingLinearMovementStrategy::move(Board* board, Entity* mover) override 
     Entity* destOccupant = board->getEntityByPosition(dest);
     if (destOccupant != nullptr) {
         mover->attack(destOccupant);
-        
         mover->rebound();
         dest = mover->_position + mover->_offset;
     }

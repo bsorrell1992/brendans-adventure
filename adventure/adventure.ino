@@ -119,17 +119,8 @@ Board* getDebugBoard() {
 void loop() {
   static bool playing = true;
   if (playing) {
-    if (player->isAlive()) {
-      // Get player input
-      int x = analogRead(X_PIN), y = analogRead(Y_PIN);
-      int dx = 0, dy = 0;
-      if (x < 500) dx = 1;
-      if (x > 526) dx = -1;
-      if (y < 500) dy = -1;
-      if (y > 526) dy = 1;
-      
-      // Move player
-      if ((dx != 0 || dy != 0) && player->timeToMove()) player->move(dx, dy);
+    if (player->isAlive()) {      
+      player->move(currentBoard);
 
       // Move enemies
       for (int i = 0; i < ARRAY_LENGTH; ++i) {
