@@ -1,6 +1,7 @@
 /*
  * Abstract base class representing a non-floor element of the board
  */
+#include <optional>
 
 #include "Board.h"
 
@@ -14,7 +15,6 @@ public:
 protected:
     // Enums representing result of move request
     enum class MoveResultCode {
-        SUCCESS,
         NO_MOVE,
         ITEM,
         NEEDS_KEY,
@@ -22,7 +22,8 @@ protected:
         NEEDS_SWORD
     };
 
-    enum MoveResultItem {
+    enum class MoveResultItem {
+        NO_ITEM,        // only used when move code is not ITEM
         ARMOR,
         HEALTH_POTION,
         KEY,
@@ -34,6 +35,6 @@ protected:
 
     typedef struct MoveResult {
         Entity::MoveResultCode emrCode;
-        int data;
+        Entity::MoveResultItem emrItem;
     };
 };

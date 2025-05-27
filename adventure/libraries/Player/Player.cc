@@ -1,3 +1,88 @@
+#include <Arduino.h>
+#include <stdexcept>
+
+#include "Player.h"
+
+Player::Player() : _moveTimer(PLAYER_DELAY) {
+    _moveTimer.startTimer();
+}
+
+void Player::move(Board* board) {
+    if (!_moveTimer.timeIsUp()) return;
+
+    // Get player input
+    int x = analogRead(X_PIN), y = analogRead(Y_PIN);
+    Point offset{0, 0};
+    if (x < 500) offset.x = 1;
+    if (x > 526) offset.x = -1;
+    if (y < 500) offset.y = -1;
+    if (y > 526) offset.y = 1;
+
+    if (!board->inBounds(_position + offset)) return; // save data and set current board to new board
+    else if (offset.x != 0 || offset.y != 0) {
+        Entity* destOccupant = board->getEntityByPosition(_position + offset);
+        if (destOccupant == nullptr) _position += offset;
+        else {
+            Entity::MoveResult moveResult = destOccupant->receiveMove(this);
+            switch(moveResult.emrCode) {
+                case Entity::MoveResultCode::ITEM:
+                    switch(moveResult.data) {
+                        case Entity::MoveResultItem::ARMOR:
+                            ++_armor;
+                            break;
+                        case Entity::MoveResultItem::HEALTH_POTION:
+                            ++_numHealthPotions;
+                            break;
+                        case Entity::MoveResultItem::KEY:
+                            _key = true;
+                            break;
+                        case Entity::MoveResultItem::PICKAXE:
+                            _pickaxe = true;
+                            break;
+                        case Entity::MoveResultItem::SPEEDBOOTS:
+                            _speedboots = true;
+                            _moveTimer.speedUp();
+                            break;
+                        case Entity::MoveResultItem::SWORD:
+                            _sword = true;
+                            break;
+                        case Entity::MoveResultItem::TREASURE:
+                            _treasure = true;
+                            break;
+                        default:
+                            throw std::runtime_error("Invalid item type");
+                    }
+                case Entity::MoveResultCode::NEEDS_KEY:
+                    if (_key) {
+                        _position += offset;
+                        board->removeEntity(destOccupant);
+                    }
+                    break;
+                case Entity::MoveResultCode::NEEDS_PICKAXE:
+                    if (_pickaxe) {
+                        _position += offset;
+                        board->removeEntity(destOccupant);
+                    }
+                    break;
+                case Entity::MoveResultCode::NEEDS_SWORD:
+                    if (_sword) {
+                        _position += offset;
+                        board->removeEntity(destOccupant);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        _moveTimer.startTimer();
+    }
+}
+
+void Player::receiveAttack(int damage) {
+    _health -= damage;
+}
+
 /*
     inline void Player::move(int dx, int dy) {
         Board* destBoard = currentBoard;

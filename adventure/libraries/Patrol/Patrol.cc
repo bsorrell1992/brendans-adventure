@@ -12,7 +12,7 @@ void Patrol::move(Board* board) override {
 }
 
 Entity::MoveResult Patrol::receiveMove(Entity* e) {
-    return {Entity::MoveResultCode::NEEDS_SWORD, 0};
+    return {Entity::MoveResultCode::NEEDS_SWORD, Entity::MoveResultItem::NO_ITEM};
 }
 
 void Entity::attack(Player* p) {

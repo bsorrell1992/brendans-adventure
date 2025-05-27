@@ -18,7 +18,7 @@ void Guard::move(Board* board) override {
 }
 
 Entity::MoveResult Guard::receiveMove(Entity* e) override {
-    return {Entity::MoveResultCode::NEEDS_SWORD, 0};
+    return {Entity::MoveResultCode::NEEDS_SWORD, Entity::MoveResultCode::NO_ITEM};
 }
 
 void Guard::attack(Player* p) {

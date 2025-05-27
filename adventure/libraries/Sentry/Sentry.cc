@@ -28,7 +28,7 @@ void Sentry::move(Board* board) override {
 }
 
 Entity::MoveResult Sentry::receiveMove(Entity* e) override {
-    return {Entity::MoveResultCode::NEEDS_SWORD, 0};
+    return {Entity::MoveResultCode::NEEDS_SWORD, Entity::MoveResultItem::NO_ITEM};
 }
 
 void Sentry::attack(Player* player) {

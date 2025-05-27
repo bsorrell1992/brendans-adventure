@@ -1,6 +1,7 @@
+template <typename T>
 struct Point {
-    int x;
-    int y;
+    T x;
+    T y;
 
     Point operator+(const Point& rhs) const;
     Point operator*(int rhs) const;
