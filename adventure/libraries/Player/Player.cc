@@ -32,12 +32,22 @@ void Player::move(Board* board) {
                     if (_key) {
                         _position += offset;
                         board->removeEntity(destOccupant);
+
+                        _points += DOOR_POINTS;
+                        Serial.print(F("You opened the door! Go claim your treasure! +"));
+                        Serial.print(DOOR_POINTS);
+                        Serial.println(F(" points"));
                     } else Serial.println(F("You need the key!"));
                     break;
                 case Entity::MoveResultCode::NEEDS_PICKAXE:
                     if (_pickaxe) {
                         _position += offset;
                         board->removeEntity(destOccupant);
+
+                        _points += BREAKABLE_WALL_POINTS;
+                        Serial.print(F("You broke a wall! +"));
+                        Serial.print(BREAKABLE_WALL_POINTS);
+                        Serial.println(F(" points"));
                     } else Serial.println(F("You need the pickaxe!"));
                     break;
                 case Entity::MoveResultCode::NEEDS_SWORD:
@@ -46,6 +56,8 @@ void Player::move(Board* board) {
                         board->removeEntity(destOccupant);
                     } else Serial.println(F("You cannot attack without the sword!"));
                     break;
+                default:
+                    Serial.println(F("Oof!"));
             }
         }
 
@@ -88,7 +100,7 @@ void Player::useSpeedboots() {
             _speedbootsOn = true;
             _moveTimer.speedUp();
             Serial.println(F("You have put on your speed boots. You are now moving twice as fast!"));
-        } else Serial.println(F("You are already wearing your speed boots!"));
+        } else Serial.println(F("You are already wearing your speed boots!"));  // shouldn't occur during normal play
     } else Serial.println(F("You do not have the speed boots."));
 }
 
@@ -98,220 +110,54 @@ void Player::removeSpeedboots() {
             _speedbootsOn = false;
             _moveTimer.slowDown();
             Serial.println(F("You have taken off your speed boots. You are now moving at your original speed."));
-        } else Serial.println(F("You are not wearing your speed boots!"));
+        } else Serial.println(F("You are not wearing your speed boots!"));      // shouldn't occur during normal play
     } else Serial.println(F("You do not have the speed boots."));
 }
 
 void Player::collectItem(Entity::MoveResultItem itemCode) {
+    _points += ITEM_POINTS;
+
     switch(itemCode) {
         case Entity::MoveResultItem::ARMOR:
             ++_armor;
+            Serial.print(F("You grabbed the armor! +"));
+            Serial.print(ITEM_POINTS);
             break;
         case Entity::MoveResultItem::HEALTH_POTION:
             ++_numHealthPotions;
+            Serial.print(F("You grabbed a health potion! +"));
+            Serial.print(ITEM_POINTS);
             break;
         case Entity::MoveResultItem::KEY:
             _key = true;
+            Serial.print(F("You grabbed the key! +"));
+            Serial.print(ITEM_POINTS);
             break;
         case Entity::MoveResultItem::PICKAXE:
             _pickaxe = true;
+            Serial.print(F("You grabbed the pickaxe! +"));
+            Serial.print(ITEM_POINTS);
             break;
         case Entity::MoveResultItem::SPEEDBOOTS:
             _speedboots = true;
             _moveTimer.speedUp();
-            Serial.print(F("You have picked up the speed boots. You are now moving twice as fast!"));
+            Serial.print(F("You have picked up the speed boots! Enter U to put them on and again to take them off. +"));
+            Serial.print(ITEM_POINTS);
             break;
         case Entity::MoveResultItem::SWORD:
             _sword = true;
+            Serial.print(F("You grabbed the sword! +"));
+            Serial.print(ITEM_POINTS);
             break;
         case Entity::MoveResultItem::TREASURE:
             _treasure = true;
+            _points += TREASURE_POINTS;
+            Serial.print(F("You grabbed the treasure! +"));
+            Serial.print(ITEM_POINTS + TREASURE_POINTS);
             break;
         default:
             throw std::runtime_error("Invalid item type");
     }
+
+    Serial.println(F(" points"));
 }
-
-/*
-    inline void Player::move(int dx, int dy) {
-        Board* destBoard = currentBoard;
-        int destX = x + dx;
-        int destY = y + dy;
-
-        // Determine which board the player is moving into
-        if (destX < 0) {
-            destBoard = destBoard->getLeft();
-            destX = ARRAY_LENGTH - 1;
-        } else if (destX >= ARRAY_LENGTH) {
-            destBoard = destBoard->getRight();
-            destX = 0;
-        }
-        if (destY < 0 && destBoard != nullptr) {
-            destBoard = destBoard->getDown();
-            destY = 0;
-        } else if (destY >= ARRAY_LENGTH && destBoard != nullptr) {
-            destBoard = destBoard->getTop();
-            destY = ARRAY_LENGTH - 1;
-        }
-
-        if (destBoard != nullptr) {
-            Entity* e = destBoard->board[destX][destY];
-            String eType = e->getType();
-            if (e == nullptr) {
-            destBoard->board[destX][destY] = player;
-            currentBoard->board[x][y] = nullptr;
-            currentBoard = destBoard;
-            x = destX;
-            y = destY;
-            } else if (eType == "guard") {
-            if (!sword) {
-                Guard* g = destBoard->board[destX][destY];
-                if (g->timeToAttack()) g->attack();
-            } else {
-                addPoints(GUARD_POINTS);
-                destBoard->board[destX][destY] = player;
-                currentBoard->board[x][y] = nullptr;
-                x = destX;
-                y = destY;
-                printKill(eType);
-            }
-            } else if (eType == "patrol") {
-            if (!sword) {
-                Patrol* p = destBoard->board[destX][destY];
-                if (p->timeToAttack()) p->attack();
-            } else {
-                addPoints(PATROL_POINTS);
-                destBoard->board[destX][destY] = player;
-                currentBoard->board[x][y] = nullptr;
-                x = destX;
-                y = destY;
-                printKill(eType);
-            }
-            } else if (eType == "sentry") {
-            if (!sword) {
-                Sentry* s = destBoard->board[destX][destY];
-                if (s->timeToAttack()) s->attack();
-            } else {
-                addPoints(SENTRY_POINTS);
-                destBoard->board[destX][destY] = player;
-                currentBoard->board[x][y] = nullptr;
-                x = destX;
-                y = destY;
-                printKill(eType);
-            }
-            } else if (eType == "boss") {
-            if (!sword) {
-                Boss* b = destBoard->board[destX][destY];
-                if (b->timeToAttack()) b->attack();
-            } else {
-                addPoints(BOSS_POINTS);
-                destBoard->board[destX][destY] = player;
-                currentBoard->board[x][y] = nullptr;
-                x = destX;
-                y = destY;
-                printKill(eType);
-            }
-            } else if (eType == "key") {
-            grabKey();
-            addPoints(ITEM_POINTS);
-            destBoard->board[destX][destY] = player;
-            currentBoard->board[x][y] = nullptr;
-            x = destX;
-            y = destY;
-            Serial.println("Key!");
-            } else if (eType == "sword") {
-            grabSword();
-            addPoints(ITEM_POINTS);
-            destBoard->board[destX][destY] = player;
-            currentBoard->board[x][y] = nullptr;
-            x = destX;
-            y = destY;
-            Serial.println("Sword!");
-            } else if (eType == "pickaxe") {
-            grabPickaxe();
-            addPoints(ITEM_POINTS);
-            destBoard->board[destX][destY] = player;
-            currentBoard->board[x][y] = nullptr;
-            x = destX;
-            y = destY;
-            Serial.println("Pickaxe!");
-            } else if (eType == "speedboots") {
-            grabSpeedBoots();
-            addPoints(ITEM_POINTS);
-            destBoard->board[destX][destY] = player;
-            currentBoard->board[x][y] = nullptr;
-            x = destX;
-            y = destY;
-            Serial.println("Speed boots!");
-            } else if (eType == "healthpotion") {
-            grabHealthPotion();
-            addPoints(ITEM_POINTS);
-            destBoard->board[destX][destY] = player;
-            currentBoard->board[x][y] = nullptr;
-            x = destX;
-            y = destY;
-            Serial.println("Health potion!");
-            } else if (eType == "armor") {
-            grabArmor();
-            addPoints(ITEM_POINTS);
-            destBoard->board[destX][destY] = player;
-            currentBoard->board[x][y] = nullptr;
-            x = destX;
-            y = destY;
-            Serial.println("You grabbed the armor!");
-            } else if (eType == "wall") {
-            Wall* w = destBoard->board[destX][destY];
-            if (w->isBreakable() && pickaxe) {
-                addPoints(BREAKABLE_WALL_POINTS);
-                destBoard->board[destX][destY] = player;
-                currentBoard->board[x][y] = nullptr;
-                x = destX;
-                y = destY;
-                Serial.print("You broke a wall!");
-            } else {
-                Serial.println("Oof!");
-            }
-            } else if (eType == "door") {
-            if (key) {
-                addPoints(DOOR_POINTS);
-
-                // Remove all door objects from board
-                for (int i = 0; i < ARRAY_LENGTH; ++i) {
-                Entity* e = destBoard->board[i][destY];
-                if (e != nullptr && e->getType() == "door") destBoard->board[i][destY] = nullptr;
-                }
-
-                destBoard->board[destX][destY] = player;
-                currentBoard->board[x][y] = nullptr;
-                x = destX;
-                y = destY;
-                Serial.print("You opened the door! Go claim your treasure!");
-            } else {
-                Serial.println("You need the key!");
-            }
-            } else if (eType == "treasure") {
-            grabTreasure();
-            addPoints(TREASURE_POINTS);
-            destBoard->board[destX][destY] = player;
-            currentBoard->board[x][y] = nullptr;
-            x = destX;
-            y = destY;
-
-            // Fill edges of board with walls
-            for (int i = 0; i < ARRAY_LENGTH; ++i) {
-                destBoard->board[i][0] = &wall;
-                destBoard->board[i][ARRAY_LENGTH - 1] = &wall;
-            }
-            for (int i = 1; i < ARRAY_LENGTH - 1; ++i) {
-                destBoard->board[0][i] = &wall;
-                destBoard->board[ARRAY_LENGTH - 1][i] = &wall;
-            }
-
-            Serial.print("Treasure! Your total is ");
-            Serial.print(points);
-            }
-        }
-
-        startMoveTimer();
-    }
-*/
