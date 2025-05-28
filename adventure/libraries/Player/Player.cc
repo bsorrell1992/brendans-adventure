@@ -52,6 +52,14 @@ void Player::move(Board* board) {
                     break;
                 case Entity::MoveResultCode::NEEDS_SWORD:
                     if (_sword) {
+                        int points = destOccupant->getKillPoints();
+                        _points += points;
+                        Serial.print(F("You killed a "));
+                        destOccupant->printName();
+                        Serial.print(F("! +"));
+                        Serial.print(points);
+                        Serial.println(F(" points"));
+
                         _position += offset;
                         board->removeEntity(destOccupant);
                     } else Serial.println(F("You cannot attack without the sword!"));
