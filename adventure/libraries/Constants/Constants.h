@@ -11,6 +11,7 @@ const unsigned long PAUSE_DURATION = 250;
 const unsigned long PLAYER_DELAY = 300;
 const unsigned long GUARD_DELAY = 150;
 const unsigned long PATROL_DELAY = 450;
+const unsigned long BOSS_DELAY = 350;
 
 const unsigned long ATTACK_DELAY = 1500;
 const unsigned long SENTRY_DELAY = 2000;
@@ -20,7 +21,7 @@ const int PLAYER_INITIAL_HEALTH = 20;
 const int GUARD_DAMAGE = 4;
 const int PATROL_DAMAGE = 2;
 const int SENTRY_DAMAGE = 10;
-const int BOSS_DAMAGE = 20;
+const int BOSS_DAMAGE = 19;
 
 // Point values
 const int GUARD_POINTS = 30;
