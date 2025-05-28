@@ -14,6 +14,9 @@ public:
     void move(Board* board) override;
     Entity::MoveResult receiveMove(Entity* e) override;
 
+    int getKillPoints() const;
+    void printName() const;
+
 private:
     void attack(Entity* e) {};
     void attack(Player* p);

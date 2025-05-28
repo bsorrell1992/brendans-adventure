@@ -1,3 +1,54 @@
+#include <Arduino.h>
+
+#include "Entity.h"
+#include "Player.h"
+#include "Point.h"
+
+struct BoardState {
+
+};
+
+class Board {
+public:
+    Board(Player* player);
+    ~Board() {}
+
+    void moveEntities();
+
+    Player* getPlayer();
+    Entity* getEntityByPosition(Point& position);
+    void getPatternFromBoard(byte pattern[ARRAY_LENGTH][ARRAY_LENGTH]) const;
+
+    void setLeft();
+    void setRight();
+    void setUp();
+    void setDown();
+    void setSpawn();
+
+private:
+    enum class BoardCode {
+        NO_BOARD,
+        SPAWN_BOARD,
+        BOARD_ONE,
+        BOARD_TWO,
+        BOARD_THREE,
+        BOARD_FOUR,
+        BOARD_FIVE,
+        BOARD_SIX,
+        BOARD_SEVEN,
+        BOARD_EIGHT,
+        BOARD_NINE,
+        BOARD_TEN,
+        BOARD_ELEVEN
+    };
+
+    static BoardCode _currentBoard = Board::BoardCode::NO_BOARD;
+
+    BoardState _state;
+    BoardCode _left, _up, _down, _right;
+    Player* _player;
+};
+
 /*
     class Board : public Printable {
     private:

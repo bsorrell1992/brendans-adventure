@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 #include "Boss.h"
 #include "Constants.h"
 #include "utilities.h"
@@ -22,6 +24,14 @@ void Boss::move(Board* board) override {
 
 Entity::MoveResult Boss:receiveMove(Player* p) {
     return {Entity::MoveResultCode::NEEDS_SWORD, Entity::MoveResultItem::NO_ITEM};
+}
+
+int Boss::getKillPoints() const {
+    return BOSS_POINTS;
+}
+
+void Boss::printName() const {
+    Serial.print(F("Boss"));
 }
 
 void Boss::attack(Player* p) {

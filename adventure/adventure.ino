@@ -119,45 +119,15 @@ Board* getDebugBoard() {
 void loop() {
   static bool playing = true;
   if (playing) {
-    if (player->isAlive()) {      
-      player->move(currentBoard);
-
-      // Move enemies
-      for (int i = 0; i < ARRAY_LENGTH; ++i) {
-        for (int j = 0; j < ARRAY_LENGTH; ++j) {
-          Entity* e = currentBoard->board[i][j];
-          if (e != nullptr) {
-            String eType = e->getType();
-            if (eType == "guard") {
-              Guard* g = currentBoard->board[i][j];
-              if (g->timeToMove()) g->move(i, j);
-            } else if (eType == "patrol") {
-              Patrol* p = currentBoard->board[i][j];
-              if (p->timeToMove()) p->move(i, j);
-            } else if (eType == "sentry") {
-              // attack at intervals
-            } else if (eType == "boss") {
-              Boss* b = currentBoard->board[i][j];
-              if (b->timeToMove()) b->move(i, j);
-            }
-          }
-
-          if (!player->isAlive()) {
-            currentBoard->board[player->getX()][player->getY()] = nullptr;
-            Serial.println("You died! Would you like to continue playing?");
-            return;
-          }
-        }
-      }
-    } else if (Serial.available()) {
+    if (player->isAlive()) currentBoard->moveEntities();
+    else if (Serial.available()) {
       String input = Serial.readString();
       input.trim();
       if (input == "yes") {
         player->revive();
-        player->setX(SPAWN_X);
-        player->setY(SPAWN_Y);
-        currentBoard = spawnBoard;
-        spawnBoard->board[SPAWN_X][SPAWN_Y] = player;
+        currentBoard.setSpawn();
+        //currentBoard = spawnBoard;
+        //spawnBoard->board[SPAWN_X][SPAWN_Y] = player;
       } else if (input == "no") playing = false;
     }
 

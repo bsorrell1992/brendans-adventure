@@ -7,7 +7,7 @@ class BoardMemento {
 private:
     friend class Board;
 
-    BoardMemento(BoardState* state);
+    BoardMemento(BoardState& state);
     BoardState& getState() const;
 
     BoardState _state;

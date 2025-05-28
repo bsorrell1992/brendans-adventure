@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include <stdexception>
 
 #include "Constants.h"
@@ -29,6 +30,14 @@ void Sentry::move(Board* board) override {
 
 Entity::MoveResult Sentry::receiveMove(Entity* e) override {
     return {Entity::MoveResultCode::NEEDS_SWORD, Entity::MoveResultItem::NO_ITEM};
+}
+
+int Sentry::getKillPoints() const {
+    return SENTRY_POINTS;
+}
+
+void Sentry::printName() const {
+    Serial.print(F("Sentry"));
 }
 
 void Sentry::attack(Player* player) {

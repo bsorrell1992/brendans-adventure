@@ -18,8 +18,23 @@ void Player::move(Board* board) {
     if (y < 500) offset.y = -1;
     if (y > 526) offset.y = 1;
 
-    if (!board->inBounds(_position + offset)) return; // save data and set current board to new board
-    else if (offset.x != 0 || offset.y != 0) {
+    if (!board->inBounds(_position + offset)) {
+        Point dest = _position + offset;
+
+        if (dest.x < 0) {
+            board->setLeft();
+            _position.x = ARRAY_LENGTH - 1;
+        } else if (dest.x >= ARRAY_LENGTH) {
+            board->setRight();
+            _position.x = 0;
+        } else if (dest.y < 0) {
+            board->setTop();
+            _position.y = ARRAY_LENGTH - 1;
+        } else {
+            board->setBottom();
+            _position.y = 0;
+        }
+    } else if (offset.x != 0 || offset.y != 0) {
         Entity* destOccupant = board->getEntityByPosition(_position + offset);
         if (destOccupant == nullptr) _position += offset;
         else {
@@ -78,7 +93,10 @@ void Player::receiveAttack(int damage) {
 
     if (_health <= 0) {
         if (_numHealthPotions > 0) drinkHealthPotion();
-        else _alive = false;
+        else {
+            _alive = false;
+            Serial.println(F("You died! Would you like to continue playing?"));
+        }
     }
 }
 
@@ -89,6 +107,7 @@ bool Player::isAlive() const {
 void Player::revive() {
     _alive = true;
     _health = PLAYER_INITIAL_HEALTH;
+    _position = {SPAWN_X, SPAWN_Y};
 }
 
 void Player::getPoints() const {
@@ -120,6 +139,10 @@ void Player::removeSpeedboots() {
             Serial.println(F("You have taken off your speed boots. You are now moving at your original speed."));
         } else Serial.println(F("You are not wearing your speed boots!"));      // shouldn't occur during normal play
     } else Serial.println(F("You do not have the speed boots."));
+}
+
+Point getPosition() const {
+    return _position;
 }
 
 void Player::collectItem(Entity::MoveResultItem itemCode) {

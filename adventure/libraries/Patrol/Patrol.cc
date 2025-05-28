@@ -15,6 +15,14 @@ Entity::MoveResult Patrol::receiveMove(Entity* e) {
     return {Entity::MoveResultCode::NEEDS_SWORD, Entity::MoveResultItem::NO_ITEM};
 }
 
+int Patrol::getKillPoints() const {
+    return PATROL_POINTS;
+}
+
+void Patrol::printName() const {
+    Serial.print(F("Patrol"));
+}
+
 void Entity::attack(Player* p) {
     p->receiveAttack(PATROL_DAMAGE);
 

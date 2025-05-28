@@ -21,6 +21,14 @@ Entity::MoveResult Guard::receiveMove(Entity* e) override {
     return {Entity::MoveResultCode::NEEDS_SWORD, Entity::MoveResultCode::NO_ITEM};
 }
 
+int Guard::getKillPoints() const {
+    return GUARD_POINTS;
+}
+
+void Guard::printName() const {
+    Serial.print(F("Guard"));
+}
+
 void Guard::attack(Player* p) {
     p->receiveAttack(GUARD_DAMAGE);
 

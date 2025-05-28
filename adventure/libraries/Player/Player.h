@@ -21,6 +21,8 @@ public:
     void useSpeedboots();
     void removeSpeedboots();
 
+    Point getPosition() const;
+
 private:
     void collectItem(Entity::MoveResultItem itemCode);
 
