@@ -141,7 +141,11 @@ void Player::removeSpeedboots() {
     } else Serial.println(F("You do not have the speed boots."));
 }
 
-Point getPosition() const {
+bool Player::hasTreasure() const {
+    return _treasure;
+}
+
+Point Player::getPosition() const {
     return _position;
 }
 

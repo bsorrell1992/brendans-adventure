@@ -7,6 +7,14 @@ const byte CATHODE_PINS[ARRAY_LENGTH] = { A3, A2, A1, A0, 5, 4, 3, 2 };
 
 const byte X_PIN = A5, Y_PIN = A4;
 
+const unsigned int MAX_NUM_BOSSES = 2;
+const unsigned int MAX_NUM_DOORS = 4;
+const unsigned int MAX_NUM_GUARDS = 4;
+const unsigned int MAX_NUM_ITEMS = 2;
+const unsigned int MAX_NUM_PATROLS = 4;
+const unsigned int MAX_NUM_SENTRIES = 2;
+const unsigned int MAX_NUM_WALLS = 36;
+
 const unsigned long PAUSE_DURATION = 250;
 const unsigned long PLAYER_DELAY = 300;
 const unsigned long GUARD_DELAY = 150;

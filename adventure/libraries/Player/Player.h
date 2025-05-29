@@ -21,6 +21,8 @@ public:
     void useSpeedboots();
     void removeSpeedboots();
 
+    bool hasTreasure() const;
+
     Point getPosition() const;
 
 private:

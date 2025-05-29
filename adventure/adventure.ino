@@ -1,8 +1,6 @@
 #include <Constants.h>
 #include <Timer.h>
 
-static Board* currentBoard = nullptr;
-static Board* spawnBoard = nullptr;
 static Player* player = nullptr;
 
 void setup() {
@@ -22,8 +20,8 @@ void setup() {
 
   // Initialize current board
   player = new Player();
-  currentBoard = getDebugBoard();
-  spawnBoard = currentBoard;
+  //currentBoard = getDebugBoard();
+  //spawnBoard = currentBoard;
 }
 
 Board* getDebugBoard() {
@@ -119,7 +117,9 @@ Board* getDebugBoard() {
 void loop() {
   static bool playing = true;
   if (playing) {
-    if (player->isAlive()) currentBoard->moveEntities();
+    Board currentBoard(player);
+
+    if (player->isAlive()) currentBoard.moveEntities();
     else if (Serial.available()) {
       String input = Serial.readString();
       input.trim();
@@ -133,7 +133,7 @@ void loop() {
 
     // Display board
     static byte pattern[ARRAY_LENGTH][ARRAY_LENGTH];
-    currentBoard->getPatternFromBoard(pattern);
+    currentBoard.getPatternFromBoard(pattern);
     //Serial.println(*currentBoard);
     display(pattern);
   }
