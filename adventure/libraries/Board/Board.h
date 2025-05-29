@@ -24,6 +24,9 @@ struct BoardState {
     int sentryCount;
     Point sentryPos[MAX_NUM_SENTRIES];
 
+    int breakableWallCount;
+    // TODO
+
     int wallCount;
     Point wallPos[MAX_NUM_WALLS];
 };
