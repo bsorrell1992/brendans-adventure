@@ -1,5 +1,7 @@
-#include <Arduino.h>
+#ifndef BOARD_H
+#define BOARD_H
 
+#include <Arduino.h>
 #include "Constants.h"
 #include "Entity.h"
 #include "Player.h"
@@ -24,11 +26,11 @@ struct BoardState {
     int sentryCount;
     Point sentryPos[MAX_NUM_SENTRIES];
 
-    int breakableWallCount;
-    // TODO
-
     int wallCount;
     Point wallPos[MAX_NUM_WALLS];
+
+    int breakableWallCount;
+    Point bwallPos[MAX_NUM_BREAKABLE_WALLS];
 };
 
 class Board {
@@ -71,3 +73,5 @@ private:
     BoardCode _left, _up, _down, _right;
     Player* _player;
 };
+
+#endif

@@ -1,4 +1,7 @@
 // Represents a timer
+#ifndef TIMER_H
+#define TIMER_H
+
 class Timer {
 public:
     Timer(unsigned long delay);
@@ -14,3 +17,5 @@ private:
     unsigned long _start;
     unsigned long _delay;
 };
+
+#endif

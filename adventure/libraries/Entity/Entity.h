@@ -1,8 +1,10 @@
 /*
  * Abstract base class representing a non-floor element of the board
  */
-#include <optional>
+#ifndef ENTITY_H
+#define ENTITY_H
 
+#include <optional>
 #include "Board.h"
 
 class Entity {
@@ -38,3 +40,5 @@ protected:
         Entity::MoveResultItem emrItem;
     };
 };
+
+#endif

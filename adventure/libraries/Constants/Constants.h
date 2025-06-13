@@ -1,3 +1,6 @@
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
 #include <Arduino.h>
 
 const byte ARRAY_LENGTH = 8;
@@ -14,6 +17,7 @@ const unsigned int MAX_NUM_ITEMS = 2;
 const unsigned int MAX_NUM_PATROLS = 4;
 const unsigned int MAX_NUM_SENTRIES = 2;
 const unsigned int MAX_NUM_WALLS = 36;
+const unsigned int MAX_NUM_BREAKABLE_WALLS = 4;
 
 const unsigned long PAUSE_DURATION = 250;
 const unsigned long PLAYER_DELAY = 300;
@@ -47,3 +51,5 @@ const int SPEED_BOOTS_MULTIPLIER = 2;
 
 const byte SPAWN_X = 3;
 const byte SPAWN_Y = 3;
+
+#endif

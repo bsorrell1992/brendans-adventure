@@ -2,6 +2,9 @@
  * Wanders back and forth through corridor
  * Movement is parallel to corridor
  */
+#ifndef PATROL_H
+#define PATROL_H
+
 #include "Board.h"
 #include "BouncingLinearMovementStrategy.h"
 #include "Entity.h"
@@ -34,3 +37,5 @@ private:
     Point _position;
     Point _offset;
 };
+
+#endif

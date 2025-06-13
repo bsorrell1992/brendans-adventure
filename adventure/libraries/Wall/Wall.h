@@ -1,3 +1,6 @@
+#ifndef WALL_H
+#define WALL_H
+
 class Wall : public Entity {
 public:
     Wall(bool isBreakable);
@@ -7,4 +10,6 @@ public:
 
 private:
     bool _isBreakable;
-}
+};
+
+#endif

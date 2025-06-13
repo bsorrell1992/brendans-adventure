@@ -1,3 +1,6 @@
+#ifndef ITEM_H
+#define ITEM_H
+
 #include "Entity.h"
 
 class Item : public Entity {
@@ -9,4 +12,6 @@ public:
 
 private:
     Entity::MoveResultItem _itemCode;
-}
+};
+
+#endif

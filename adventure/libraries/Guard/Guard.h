@@ -2,6 +2,9 @@
  * Moves back and forth in front of an entrance
  * Movement is perpendicular to corridor
  */
+#ifndef GUARD_H
+#define GUARD_H
+
 #include "Board.h"
 #include "BouncingLinearMovementStrategy.h"
 #include "Entity.h"
@@ -34,3 +37,5 @@ private:
     Point _position;
     Point _offset;
 };
+
+#endif

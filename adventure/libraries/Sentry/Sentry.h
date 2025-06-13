@@ -1,7 +1,10 @@
 /*
  * Enemy which does not move
  * Deals high damage in an area around it at intervals
-*/
+ */
+#ifndef SENTRY_H
+#define SENTRY_H
+
 #include "Entity.h"
 #include "Player.h"
 #include "Point.h"
@@ -25,3 +28,5 @@ private:
     int _attackAreaLength;
     Point _position;
 };
+
+#endif

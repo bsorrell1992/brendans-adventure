@@ -1,3 +1,6 @@
+#ifndef POINT_H
+#define POINT_H
+
 #include <Arduino.h>
 
 struct Point {
@@ -10,3 +13,5 @@ struct Point {
     Point& operator+=(const Point& rhs);
     Point& operator*=(int rhs);
 };
+
+#endif

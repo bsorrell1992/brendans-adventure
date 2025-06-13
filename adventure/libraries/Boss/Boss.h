@@ -2,6 +2,9 @@
  * Chases player and deals high damage
  * Position resets after screen changes
  */
+#ifndef BOSS_H
+#define BOSS_H
+
 #include "Board.h"
 #include "Entity.h"
 #include "Player.h"
@@ -26,3 +29,5 @@ private:
     Point _position;
     Timer _moveTimer;
 };
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef BOUNCINGLINEARMOVEMENTSTRATEGY_H
+#define BOUNCINGLINEARMOVEMENTSTRATEGY_H
+
 #include "Board.h"
 #include "Entity.h"
 #include "EntityMovementStrategy.h"
@@ -9,3 +12,5 @@ class BouncingLinearMovementStrategy : public EntityMovementStrategy {
 public:
     void move(Board* board, Entity* e) override;
 }
+
+#endif
